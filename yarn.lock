@@ -8660,13 +8660,18 @@ strip-json-comments@~2.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==
 
-style-loader@^0.23.1:
+style-loader@0.23.1:
   version "0.23.1"
   resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.23.1.tgz#cb9154606f3e771ab6c4ab637026a1049174d925"
   integrity sha512-XK+uv9kWwhZMZ1y7mysB+zoihsEj4wneFWAS5qoiLwzW0WzSqMrrsIy+a3zkQJq0ipFtBpX5W3MqyRIBF/WFGg==
   dependencies:
     loader-utils "^1.1.0"
     schema-utils "^1.0.0"
+
+styless.css@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/styless.css/-/styless.css-0.0.2.tgz#44c28a86535b566ecc562bb2262a548ce5f41f06"
+  integrity sha512-aeonSF/mTsb0uO4EWumR0k+ElTALx/iNhA0AekvwAochD2SozKvDkqfYevP+/VzZ0pn9Chd5zsjvW76MA68xKg==
 
 superstatic@^9.0.3:
   version "9.0.3"

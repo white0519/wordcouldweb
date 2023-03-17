@@ -7,7 +7,44 @@ class Home extends React.Component {
         return (
             <Card>
                 <CardContent>
-                    IoT 기반 실시간 변위측정 시스템
+                    <div style={{ fontSize: '28px' }}>
+                        <div>
+                            IoT 기반 실시간 변위측정 시스템
+                        </div>
+                    </div>
+                    <div style={{ visibility: 'hidden', fontsize: '300px' }}>
+                            a
+                    </div>
+                    <div style={{ visibility: 'hidden', fontsize: '300px' }}>
+                            a
+                    </div>
+                    <div style={{ fontSize: '20px' }}>
+                        시공현장 :
+                    </div>
+                    <div style={{ visibility: 'hidden', fontsize: '300px' }}>
+                            a
+                    </div>
+                    <div style={{ fontSize: '20px' }}>
+                        시공기간 :
+                    </div>
+                    <div style={{ visibility: 'hidden' }}>
+                            a
+                    </div>
+                    <div style={{ fontSize: '20px' }}>
+                        시공사 :
+                    </div>
+                    <div style={{ visibility: 'hidden' }}>
+                            a
+                    </div>
+                    <div style={{ fontSize: '20px' }}>
+                        터널정보 :
+                    </div>
+                    <div style={{ visibility: 'hidden' }}>
+                            a
+                    </div>
+                    <div style={{ fontSize: '20px' }}>
+                        시공방법 :
+                    </div>
                 </CardContent>
             </Card>
         );
