@@ -83,9 +83,8 @@ class Sensor extends React.Component {
     }
     handleSubmit = () => {
         const sensor = {
-            Time: this.state.Time,
-            Distance: this.state.Distance,
-            Button: this.state.Button
+            sensor: this.state.sensor,
+            Distance: this.state.Distance
         }
         this.handleDialogToggle();
         if (!sensor.Time && !sensor.Time) {
@@ -97,7 +96,6 @@ class Sensor extends React.Component {
         this._delete(id);
     }
     render() {
-        const { classes } = this.props;
         return (
             <div>
                 {Object.keys(this.state.sensor).map(id => {
@@ -109,16 +107,9 @@ class Sensor extends React.Component {
                                     <Typography gutterBottom variant="h6" component="h2">
                                         거리: {sensor.Distance}
                                     </Typography>
-                                    <Grid container>
-                                        <Grid item xs = {6}>
-                                            <Typography gutterBottom variant="h6" component="h2">
-                                                측정시간: {sensor.Time}
-                                            </Typography>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                            <Button variant="contained" color="primary" onClick={() => this.handleDelete(id)}>삭제</Button>
-                                        </Grid>
-                                    </Grid>
+                                    <Typography gutterBottom variant="h6" component="h2">
+                                        측정시간: {sensor.Time}
+                                    </Typography>
                                     <Typography color="textSecondary" gutterBottom variant="h6" component="h2">
                                         데이터 수정 여부: {sensor.Button}
                                     </Typography>
@@ -127,24 +118,9 @@ class Sensor extends React.Component {
                         </div>
                     );
                 })}
-                <Fab color="primary" className={classes.fab} onClick={this.handleDialogToggle}>
-                    <AddIcon />
-                </Fab>
-                <Dialog open={this.state.dialog} onClose={this.handleDialogToggle}>
-                    <DialogTitle>단어 추가</DialogTitle>
-                    <DialogContent>
-                        <TextField label="날짜 및 시간" type="word" name="Time" value={this.state.Time} onChange={this.handleValueChange} /><br />
-                        <TextField label="실측거리" type="number" name="Distance" value={this.state.Distance} onChange={this.handleValueChange} /><br />
-                        <TextField label="데이터수정 여부(O,X만)" type="word" name="Button" value={this.state.Button} onChange={this.handleValueChange} /><br />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="contained" color="primary" onClick={this.handleSubmit}>추가</Button>
-                        <Button variant="outlined" color="primary" onClick={this.handleDialogToggle}>닫기</Button>
-                    </DialogActions>
-                </Dialog>
             </div>
         );
     }
 }
 
-export default withStyles(styles)(Sensor);
+export default Sensor;

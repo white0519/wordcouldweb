@@ -38,22 +38,22 @@ class AppShell extends React.Component {
                     <Drawer open={this.state.toggle}>
                         <MenuItem onClick={this.handleDrawerToggle}>
                         <Link component={RouterLink} to="/">
-                            Home
+                            홈 화면
                         </Link>
                         </MenuItem>
                         <MenuItem onClick={this.handleDrawerToggle}>
                         <Link component={RouterLink} to="/Texts">
-                            Texts
+                            텍스트 관리
                         </Link>
                         </MenuItem>
                         <MenuItem onClick={this.handleDrawerToggle}>
                         <Link component={RouterLink} to="/Sensor">
-                            Sensor
+                            센서 측정 관리
                         </Link>
                         </MenuItem>
                     </Drawer>
                 </div>
-                <div id="content" style={{margin: 'auto', marginTop: '20px'}}>
+                <div id="content" style={{margin: 'auto', marginTop: '30px'}}>
                     {React.cloneElement(this.props.children)}                
                 </div>
             </div>       
