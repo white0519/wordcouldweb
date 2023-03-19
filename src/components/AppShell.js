@@ -51,6 +51,11 @@ class AppShell extends React.Component {
                             센서 측정 관리
                         </Link>
                         </MenuItem>
+                        <MenuItem onClick={this.handleDrawerToggle}>
+                        <Link component={RouterLink} to="/Graph">
+                            그래프
+                        </Link>
+                        </MenuItem>
                     </Drawer>
                 </div>
                 <div id="content" style={{margin: 'auto', marginTop: '30px'}}>

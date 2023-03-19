@@ -7,7 +7,7 @@ class Home extends React.Component {
         return (
             <Card>
                 <CardContent>
-                    <div style={{ fontSize: '28px' }}>
+                    <div style={{ fontSize: '25px' }}>
                         <div>
                             IoT 기반 실시간 변위측정 시스템
                         </div>

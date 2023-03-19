@@ -12,6 +12,66 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import { Line } from "react-chartjs-2";
+import "chartjs-plugin-streaming";
+import moment from "moment";
+
+const Chart = require("react-chartjs-2").Chart;
+
+const chartColors = {
+  red: "rgb(255, 99, 132)",
+  orange: "rgb(255, 159, 64)",
+  yellow: "rgb(255, 205, 86)",
+  green: "rgb(75, 192, 192)",
+  blue: "rgb(54, 162, 235)",
+  purple: "rgb(153, 102, 255)",
+  grey: "rgb(201, 203, 207)"
+};
+
+//const color = Chart.helpers.color;
+const data = {
+  datasets: [
+    {
+      label: "Dataset 1 (linear interpolation)",
+      backgroundColor: chartColors.red,
+      borderColor: chartColors.red,
+      fill: false,
+      lineTension: 0,
+      borderDash: [8, 4],
+      data: []
+    }
+  ]
+};
+
+const options = {
+  elements: {
+    line: {
+      tension: 0.5
+    }
+  },
+  scales: {
+    xAxes: [{
+      type: 'realtime',
+      realtime: {
+        onRefresh: function(chart) {
+          chart.data.datasets.forEach(function(dataset) {
+            dataset.data.push({
+              x: moment().format("hh:mm:ss"),
+              y: Math.random()
+            });
+          });
+        },
+        delay: 2000
+      }
+    }],
+    yAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: 'value'
+      }
+    }]
+  }
+};
 
 const styles = theme => ({
     fab: {
@@ -33,14 +93,24 @@ class Sensor extends React.Component {
             Distance:''
         };
     }
+
+    componentDidMount() {
+        this._get();
+    }
+
     _get() {
         fetch(`${databaseURL}/sensor.json`).then(res => {
             if(res.status != 200) {
                 throw new Error(res.statusText);
             }
+
             return res.json();
-        }).then(sensor => this.setState({sensor: sensor}));
+        }).then(sensor => {
+            data.datasets[0].data.push({x : moment().format("hh:mm:ss"), y : sensor.Distance})
+            this.setState({sensor: sensor})
+        });
     }
+    
     _post(sensor) {
         return fetch(`${databaseURL}/sensor.json`, {
             method: 'POST',
@@ -98,35 +168,69 @@ class Sensor extends React.Component {
     }
     render() {
         const { classes } = this.props;
+        var dataCount = 0
+
+        
         return (
             <div>
                 {Object.keys(this.state.sensor).map(id => {
                     const sensor = this.state.sensor[id];
-                    return (
-                        <div key={id}>
-                            <Card>
-                                <CardContent>
-                                    <Typography gutterBottom variant="h6" component="h2">
-                                        거리: {sensor.Distance}
-                                    </Typography>
-                                    <Grid container>
-                                        <Grid item xs = {6}>
-                                            <Typography gutterBottom variant="h6" component="h2">
-                                                측정시간: {sensor.Time}
-                                            </Typography>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                            <Button variant="contained" color="primary" onClick={() => this.handleDelete(id)}>삭제</Button>
+                    dataCount = dataCount + 1
+                    if(dataCount <= 1){
+                        return (
+                            <div key={id}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h6" component="h2">
+                                            거리: {sensor.Distance}
+                                        </Typography>
+                                        <Grid container>
+                                            <Grid item xs = {6}>
+                                                <Typography gutterBottom variant="h6" component="h2">
+                                                    측정시간: {sensor.Time}
+                                                </Typography>
                                         </Grid>
-                                    </Grid>
-                                    <Typography color="textSecondary" gutterBottom variant="h6" component="h2">
-                                        데이터 수정 여부: {sensor.Button}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    );
+                                        <Grid item xs={6}>
+                                                
+                                            </Grid>
+                                        </Grid>
+                                        <Typography color="textSecondary" gutterBottom variant="h6" component="h2">
+                                            데이터 수정 여부: {sensor.Button}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        );
+                    }else{
+                        return (
+                            <div key={id}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h6" component="h2">
+                                            거리: {sensor.Distance}
+                                        </Typography>
+                                        <Grid container>
+                                            <Grid item xs = {6}>
+                                                <Typography gutterBottom variant="h6" component="h2">
+                                                    측정시간: {sensor.Time}
+                                                </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                                <Button variant="contained" color="primary" onClick={() => this.handleDelete(id)}>삭제</Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Typography color="textSecondary" gutterBottom variant="h6" component="h2">
+                                            데이터 수정 여부: {sensor.Button}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        );
+                    }
                 })}
+
+                <Line data={data} options={options} />
+
                 <Fab color="primary" className={classes.fab} onClick={this.handleDialogToggle}>
                     <AddIcon />
                 </Fab>

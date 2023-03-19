@@ -135,6 +135,7 @@ class Texts extends React.Component {
             <div>
                 {Object.keys(this.state.texts).map(id => {
                     const text = this.state.texts[id];
+                    console.log(text)
                     return (
                         <Card key={id}>
                             <CardContent>

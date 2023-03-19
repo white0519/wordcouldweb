@@ -12,6 +12,46 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import { Line } from "react-chartjs-2";
+import "chartjs-plugin-streaming";
+import moment from "moment";
+
+const Chart = require("react-chartjs-2").Chart;
+
+const chartColors = {
+  red: "rgb(255, 99, 132)",
+  orange: "rgb(255, 159, 64)",
+  yellow: "rgb(255, 205, 86)",
+  green: "rgb(75, 192, 192)",
+  blue: "rgb(54, 162, 235)",
+  purple: "rgb(153, 102, 255)",
+  grey: "rgb(201, 203, 207)"
+};
+
+//const color = Chart.helpers.color;
+const data = {
+  datasets: [
+    {
+      label: "Dataset 1 (linear interpolation)",
+      backgroundColor: chartColors.red,
+      borderColor: chartColors.red,
+      fill: false,
+      lineTension: 0,
+      borderDash: [8, 4],
+      data: []
+    }
+  ]
+};
+
+const options = {
+  elements: {
+    line: {
+      tension: 0.5
+    }
+  },
+  scales: {
+    }
+};
 
 const styles = theme => ({
     fab: {
@@ -38,8 +78,14 @@ class Sensor extends React.Component {
             if(res.status != 200) {
                 throw new Error(res.statusText);
             }
+
             return res.json();
-        }).then(sensor => this.setState({sensor: sensor}));
+        }).then(sensor => {
+            // 0으로 되어 있는 부분을 moment 모듈에 있는 현재시간 불러오는 함수로 변경해서 실시간으로 차트에 데이터 들어가게 하는 것
+            // Firebase에서 데이터가 업데이트 된 이벤트를 감지(Handling) 함수를 파악해서, Firebase에서 실시간으로 업데이트 되었다고 수신받은 값을 y 부분에 들어가게 하는 것
+            data.datasets[0].data.push({x : sensor.Time, y : sensor.Distance})
+            this.setState({sensor: sensor})
+        });
     }
     _post(sensor) {
         return fetch(`${databaseURL}/sensor.json`, {
@@ -83,8 +129,9 @@ class Sensor extends React.Component {
     }
     handleSubmit = () => {
         const sensor = {
-            sensor: this.state.sensor,
-            Distance: this.state.Distance
+            Time: this.state.Time,
+            Distance: this.state.Distance,
+            Button: this.state.Button
         }
         this.handleDialogToggle();
         if (!sensor.Time && !sensor.Time) {
@@ -96,31 +143,88 @@ class Sensor extends React.Component {
         this._delete(id);
     }
     render() {
+        const { classes } = this.props;
+        var dataCount = 0
+
+        
         return (
             <div>
                 {Object.keys(this.state.sensor).map(id => {
                     const sensor = this.state.sensor[id];
-                    return (
-                        <div key={id}>
-                            <Card>
-                                <CardContent>
-                                    <Typography gutterBottom variant="h6" component="h2">
-                                        거리: {sensor.Distance}
-                                    </Typography>
-                                    <Typography gutterBottom variant="h6" component="h2">
-                                        측정시간: {sensor.Time}
-                                    </Typography>
-                                    <Typography color="textSecondary" gutterBottom variant="h6" component="h2">
-                                        데이터 수정 여부: {sensor.Button}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    );
+                    dataCount = dataCount + 1
+                    if(dataCount <= 1){
+                        return (
+                            <div key={id}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h6" component="h2">
+                                            거리: {sensor.Distance}
+                                        </Typography>
+                                        <Grid container>
+                                            <Grid item xs = {6}>
+                                                <Typography gutterBottom variant="h6" component="h2">
+                                                    측정시간: {sensor.Time}
+                                                </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                                
+                                            </Grid>
+                                        </Grid>
+                                        <Typography color="textSecondary" gutterBottom variant="h6" component="h2">
+                                            데이터 수정 여부: {sensor.Button}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        );
+                    }else{
+                        return (
+                            <div key={id}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h6" component="h2">
+                                            거리: {sensor.Distance}
+                                        </Typography>
+                                        <Grid container>
+                                            <Grid item xs = {6}>
+                                                <Typography gutterBottom variant="h6" component="h2">
+                                                    측정시간: {sensor.Time}
+                                                </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                                <Button variant="contained" color="primary" onClick={() => this.handleDelete(id)}>삭제</Button>
+                                            </Grid>
+                                        </Grid>
+                                        <Typography color="textSecondary" gutterBottom variant="h6" component="h2">
+                                            데이터 수정 여부: {sensor.Button}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        );
+                    }
                 })}
+
+                <Line data={data} options={options} />
+
+                <Fab color="primary" className={classes.fab} onClick={this.handleDialogToggle}>
+                    <AddIcon />
+                </Fab>
+                <Dialog open={this.state.dialog} onClose={this.handleDialogToggle}>
+                    <DialogTitle>단어 추가</DialogTitle>
+                    <DialogContent>
+                        <TextField label="날짜 및 시간" type="word" name="Time" value={this.state.Time} onChange={this.handleValueChange} /><br />
+                        <TextField label="실측거리" type="number" name="Distance" value={this.state.Distance} onChange={this.handleValueChange} /><br />
+                        <TextField label="데이터수정 여부(O,X만)" type="word" name="Button" value={this.state.Button} onChange={this.handleValueChange} /><br />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="primary" onClick={this.handleSubmit}>추가</Button>
+                        <Button variant="outlined" color="primary" onClick={this.handleDialogToggle}>닫기</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
     }
 }
 
-export default Sensor;
+export default withStyles(styles)(Sensor);
