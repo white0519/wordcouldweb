@@ -16,6 +16,37 @@ import { Line } from "react-chartjs-2";
 import "chartjs-plugin-streaming";
 import moment from "moment";
 
+const data = {
+    labels: ['0:00','1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00',],
+    
+    datasets: [
+      {
+        label: 'Last Day Result',
+        data: [124,123,123,125,125,126,126,127,127,127,122,126,122,123,123,122,123,124,123,123,124,122,121,123,124],
+        fill: true,
+        backgroundColor: 'rgba(75,192,192,0.2)',
+        borderColor: 'rgba(75,192,192,1)',
+      }
+    ],
+  };
+
+const options = {
+    scales: {
+    x: {
+    title: {
+    display: true,
+    text: 'Time'
+    }
+    },
+    y: {
+    title: {
+    display: true,
+    text: 'Distance(mm)'
+    }
+    }
+    }
+};
+
 const styles = theme => ({
     fab: {
         position: 'fixed',
@@ -116,7 +147,7 @@ class Sensor extends React.Component {
                 {Object.keys(this.state.sensor).map(id => {
                     const sensor = this.state.sensor[id];
                     dataCount = dataCount + 1
-                    if(dataCount <= 1){
+                    if(dataCount <= 2){
                         return (
                             <div key={id}>
                                 <Card>
@@ -169,7 +200,7 @@ class Sensor extends React.Component {
                     }
                 })}
 
-
+                <Line data={data} options={options} />
 
                 <Fab color="primary" className={classes.fab} onClick={this.handleDialogToggle}>
                     <AddIcon />

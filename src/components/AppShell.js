@@ -53,7 +53,7 @@ class AppShell extends React.Component {
                         </MenuItem>
                         <MenuItem onClick={this.handleDrawerToggle}>
                         <Link component={RouterLink} to="/Graph">
-                            그래프
+                            시공 진행률
                         </Link>
                         </MenuItem>
                     </Drawer>
