@@ -16,6 +16,63 @@ import { Line } from "react-chartjs-2";
 import "chartjs-plugin-streaming";
 import moment from "moment";
 
+const Chart = require("react-chartjs-2").Chart;
+
+const chartColors = {
+  red: "rgb(255, 99, 132)",
+  orange: "rgb(255, 159, 64)",
+  yellow: "rgb(255, 205, 86)",
+  green: "rgb(75, 192, 192)",
+  blue: "rgb(54, 162, 235)",
+  purple: "rgb(153, 102, 255)",
+  grey: "rgb(201, 203, 207)"
+};
+
+//const color = Chart.helpers.color;
+const data = {
+  datasets: [
+    {
+      label: "Dataset 1 (linear interpolation)",
+      backgroundColor: chartColors.red,
+      borderColor: chartColors.red,
+      fill: false,
+      lineTension: 0,
+      borderDash: [8, 4],
+      data: []
+    }
+  ]
+};
+
+const options = {
+  elements: {
+    line: {
+      tension: 0.5
+    }
+  },
+  scales: {
+    xAxes: [{
+      type: 'realtime',
+      realtime: {
+        onRefresh: function(chart) {
+          chart.data.datasets.forEach(function(dataset) {
+            dataset.data.push({
+              x: moment().format("hh:mm:ss"),
+              y: Math.random()
+            });
+          });
+        },
+        delay: 2000
+      }
+    }],
+    yAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: 'value'
+      }
+    }]
+  }
+};
+
 const styles = theme => ({
     fab: {
         position: 'fixed',
@@ -48,7 +105,10 @@ class Sensor extends React.Component {
             }
 
             return res.json();
-        }).then(sensor => this.setState({sensor: sensor}));
+        }).then(sensor => {
+            data.datasets[0].data.push({x : moment().format("hh:mm:ss"), y : sensor.Distance})
+            this.setState({sensor: sensor})
+        });
     }
     
     _post(sensor) {
@@ -169,7 +229,7 @@ class Sensor extends React.Component {
                     }
                 })}
 
-
+                <Line data={data} options={options} />
 
                 <Fab color="primary" className={classes.fab} onClick={this.handleDialogToggle}>
                     <AddIcon />

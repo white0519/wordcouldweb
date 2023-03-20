@@ -6,6 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
+    "@syncfusion/ej2-react-charts": "^20.4.54",
     "chart": "^0.1.2",
     "chart.js": "^3.6.2",
     "chartjs-plugin-streaming": "^2.0.0",

@@ -5,6 +5,7 @@ import Home from './Home';
 import Texts from './Texts';
 import Sensor from './Sensor';
 import Detail from './Detail';
+import Graph from './Graph';
 
 
 class App extends React.Component {
@@ -16,6 +17,7 @@ class App extends React.Component {
                         <Route exact path="/" component={Home}/>
                         <Route exact path="/Texts" component={Texts}/>
                         <Route exact path="/Sensor" component={Sensor}/>
+                        <Route exact path="/Graph" component={Graph}/>
                         <Route exact path="/detail/:textID" component={Detail}/>
                     </div>
                 </AppShell>

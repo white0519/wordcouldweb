@@ -2,14 +2,14 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Line } from 'react-chartjs-2';
-import './App.css';
 
 const data = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  labels: ['0:00','1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00',],
+  
   datasets: [
     {
       label: 'First dataset',
-      data: [33, 53, 85, 41, 44, 65],
+      data: ['0:00','1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00',],
       fill: true,
       backgroundColor: 'rgba(75,192,192,0.2)',
       borderColor: 'rgba(75,192,192,1)',
@@ -23,17 +23,14 @@ const data = {
   ],
 };
 
-function App() {
-  return (
-    <div className="App">
-      <Card>
-        <CardContent>
-          React 및 Firebase 기반의 워드 클라우드 어플리케이션
-        </CardContent>
-      </Card>
-      <Line data={data} />
-    </div>
-  );
-}
-
-export default (App)(Graph);
+class Graph extends React.Component {
+    render() {
+      return (
+        <div>
+          <Line data={data} />
+        </div>
+      );
+    }
+  }
+  
+  export default Graph;
